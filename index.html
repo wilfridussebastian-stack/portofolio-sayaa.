@@ -1,3 +1,10 @@
+Siap, ini adalah versi kode kamu yang sudah saya perbaiki agar **Responsive (bisa dibuka di HP dengan rapi)** tanpa mengubah fitur, animasi, atau desain yang sudah kamu buat.
+
+Saya menambahkan **Hamburger Menu** khusus untuk tampilan HP agar menu navigasi kamu tidak hilang, dan mengatur agar elemen lainnya menyesuaikan lebar layar.
+
+### Silakan ganti seluruh kode di GitHub kamu dengan kode ini:
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -53,10 +60,14 @@
         .modal-active { display: flex !important; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         
-        #game-canvas { border-radius: 20px; background: #0f172a; cursor: crosshair; }
+        #game-canvas { border-radius: 20px; background: #0f172a; cursor: crosshair; max-width: 100%; height: auto; }
 
-        /* Style untuk tombol ganti foto saat hover */
         .profile-container:hover .upload-hint { opacity: 1; }
+
+        /* Mobile Menu Style */
+        #mobile-menu { transition: all 0.3s ease-in-out; }
+        .menu-open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+        .menu-closed { transform: translateY(-20px); opacity: 0; pointer-events: none; }
     </style>
 </head>
 
@@ -71,7 +82,7 @@
                 <div class="p-1.5 bg-slate-900 rounded-xl border border-orange-500/30">
                     <img src="https://avatars.githubusercontent.com/u/221277257?v=4&s=400" alt="HIMATIF" class="w-7 h-7 object-contain">
                 </div>
-                <h1 class="font-black text-2xl tracking-tighter bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent">BASTIAN GANTENG<span class="text-orange-500">.</span></h1>
+                <h1 class="font-black text-xl lg:text-2xl tracking-tighter bg-gradient-to-r from-orange-500 to-blue-500 bg-clip-text text-transparent">BASTIAN GANTENG<span class="text-orange-500">.</span></h1>
             </div>
 
             <ul class="hidden lg:flex space-x-8 font-bold text-[11px] uppercase tracking-widest">
@@ -82,41 +93,48 @@
                 <li><button onclick="showPage('interactive')" class="hover:text-orange-500 text-blue-500">Interactive</button></li>
             </ul>
             
-            <button onclick="toggleDarkMode()" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl shadow-xl">
-                <span class="dark:hidden">🌙</span><span class="hidden dark:block">☀️</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <button onclick="toggleDarkMode()" class="p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl shadow-xl">
+                    <span class="dark:hidden">🌙</span><span class="hidden dark:block">☀️</span>
+                </button>
+                <button onclick="toggleMenu()" class="lg:hidden p-3 bg-slate-100 dark:bg-slate-800 rounded-2xl shadow-xl">
+                    <span id="menu-icon">☰</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="lg:hidden menu-closed absolute top-20 left-0 w-full p-4 z-40">
+            <ul class="glass rounded-3xl p-6 flex flex-col space-y-4 font-bold text-xs uppercase tracking-widest shadow-2xl border border-white/10">
+                <li><button onclick="showPage('home'); toggleMenu()" class="w-full text-left p-2">Home</button></li>
+                <li><button onclick="showPage('projects'); toggleMenu()" class="w-full text-left p-2">Portfolio</button></li>
+                <li><button onclick="showPage('about'); toggleMenu()" class="w-full text-left p-2">Visi & Misi</button></li>
+                <li><button onclick="showPage('contact'); toggleMenu()" class="w-full text-left p-2">Contact</button></li>
+                <li><button onclick="showPage('interactive'); toggleMenu()" class="w-full text-left p-2 text-blue-500 font-black">Interactive</button></li>
+            </ul>
         </div>
     </nav>
 
-    <!-- HOME -->
     <header id="home" class="page min-h-[90vh] flex flex-col items-center justify-center text-center px-6">
         <div data-aos="zoom-in">
-            <div class="relative w-48 h-48 mx-auto mb-10 profile-container cursor-pointer" onclick="document.getElementById('fileInput').click()">
-                <div class="absolute inset-0 bg-orange-500 rounded-[3rem] rotate-12 blur-2xl opacity-20"></div>
-                
-                <!-- FOTO PROFIL -->
-                <img id="profile-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Bastian" alt="Foto Bastian" class="relative w-full h-full object-cover bg-slate-900 rounded-[3rem] border-8 border-white dark:border-slate-800 shadow-2xl transition-all duration-300">
-                
-                <!-- Overlay Ganti Foto -->
-                <div class="upload-hint absolute inset-0 bg-black/40 rounded-[3rem] opacity-0 transition-opacity flex items-center justify-center">
-                    <span class="text-white text-[10px] font-black uppercase tracking-widest">Ganti Foto</span>
+            <div class="relative w-32 h-32 lg:w-48 lg:h-48 mx-auto mb-10 profile-container cursor-pointer" onclick="document.getElementById('fileInput').click()">
+                <div class="absolute inset-0 bg-orange-500 rounded-[2rem] lg:rounded-[3rem] rotate-12 blur-2xl opacity-20"></div>
+                <img id="profile-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Bastian" alt="Foto Bastian" class="relative w-full h-full object-cover bg-slate-900 rounded-[2rem] lg:rounded-[3rem] border-4 lg:border-8 border-white dark:border-slate-800 shadow-2xl transition-all duration-300">
+                <div class="upload-hint absolute inset-0 bg-black/40 rounded-[2rem] lg:rounded-[3rem] opacity-0 transition-opacity flex items-center justify-center">
+                    <span class="text-white text-[8px] lg:text-[10px] font-black uppercase tracking-widest">Ganti Foto</span>
                 </div>
-
-                <!-- Input Hidden -->
                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage(event)">
             </div>
 
-            <h2 class="text-7xl font-extrabold tracking-tighter mb-6 leading-none">
+            <h2 class="text-4xl lg:text-7xl font-extrabold tracking-tighter mb-6 leading-tight lg:leading-none">
                 Bastian <span class="text-orange-500 italic">Ganteng</span>
             </h2>
-            <p id="typing-text" class="text-xl font-medium text-slate-500 dark:text-slate-400 h-8 mb-10 italic"></p>
-            <button onclick="showPage('projects')" class="bg-slate-950 dark:bg-white dark:text-black text-white px-12 py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-2xl">
+            <p id="typing-text" class="text-lg lg:text-xl font-medium text-slate-500 dark:text-slate-400 h-8 mb-10 italic"></p>
+            <button onclick="showPage('projects')" class="bg-slate-950 dark:bg-white dark:text-black text-white px-8 lg:px-12 py-4 lg:py-5 rounded-2xl font-black text-[10px] lg:text-xs uppercase tracking-[0.2em] shadow-2xl">
                 Explore Workspace
             </button>
         </div>
     </header>
 
-    <!-- PROJECTS -->
     <section id="projects" class="page hidden py-24 container mx-auto px-6">
         <div class="grid lg:grid-cols-12 gap-10">
             <div class="lg:col-span-4 space-y-8" data-aos="fade-right">
@@ -131,20 +149,20 @@
             </div>
 
             <div class="lg:col-span-8">
-                <h2 class="text-5xl font-black italic tracking-tighter mb-12">Portfolio.</h2>
+                <h2 class="text-4xl lg:text-5xl font-black italic tracking-tighter mb-12">Portfolio.</h2>
                 <div class="grid md:grid-cols-2 gap-8">
-                    <div class="project-card group rounded-[3rem] bg-slate-900 overflow-hidden relative aspect-[4/5] shadow-2xl" onclick="openModal('bstats')">
+                    <div class="project-card group rounded-[2.5rem] lg:rounded-[3rem] bg-slate-900 overflow-hidden relative aspect-[4/5] shadow-2xl" onclick="openModal('bstats')">
                         <img src="https://images.unsplash.com/photo-1551288049-bbda64626744?q=80&w=2070" class="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-slate-950 to-transparent">
-                            <h3 class="text-3xl font-black text-white italic">B.STATS</h3>
-                            <p class="text-slate-400 text-xs mt-2 uppercase font-bold tracking-widest italic">Click to detail</p>
+                            <h3 class="text-2xl lg:text-3xl font-black text-white italic">B.STATS</h3>
+                            <p class="text-slate-400 text-[10px] mt-2 uppercase font-bold tracking-widest italic">Click to detail</p>
                         </div>
                     </div>
-                    <div class="project-card group rounded-[3rem] bg-blue-900 overflow-hidden relative aspect-[4/5] shadow-2xl" onclick="openModal('himatif')">
+                    <div class="project-card group rounded-[2.5rem] lg:rounded-[3rem] bg-blue-900 overflow-hidden relative aspect-[4/5] shadow-2xl" onclick="openModal('himatif')">
                         <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015" class="w-full h-full object-cover opacity-40 group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-slate-950 to-transparent">
-                            <h3 class="text-3xl font-black text-white italic">HIMATIF Web</h3>
-                            <p class="text-slate-400 text-xs mt-2 uppercase font-bold tracking-widest italic">Click to detail</p>
+                            <h3 class="text-2xl lg:text-3xl font-black text-white italic">HIMATIF Web</h3>
+                            <p class="text-slate-400 text-[10px] mt-2 uppercase font-bold tracking-widest italic">Click to detail</p>
                         </div>
                     </div>
                 </div>
@@ -152,15 +170,14 @@
         </div>
     </section>
 
-    <!-- ABOUT -->
-    <section id="about" class="page hidden py-24 container mx-auto px-6">
+    <section id="about" class="page hidden py-12 lg:py-24 container mx-auto px-6">
         <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-6xl font-black italic tracking-tighter mb-10 leading-tight">Visi & <span class="text-orange-500">Misi.</span></h2>
-            <div class="glass p-12 rounded-[4rem] text-xl leading-relaxed text-slate-600 dark:text-slate-400 text-left">
-                <p class="mb-6 italic font-bold text-slate-900 dark:text-slate-100 underline decoration-orange-500">Visi:</p>
-                <p class="mb-8">Menjadi pengembang solusi digital yang inovatif dan berkontribusi aktif dalam kemajuan teknologi di lingkungan Universitas Tangerang Raya.</p>
-                <p class="mb-6 italic font-bold text-slate-900 dark:text-slate-100 underline decoration-blue-500">Misi:</p>
-                <ul class="list-disc pl-6 space-y-4">
+            <h2 class="text-4xl lg:text-6xl font-black italic tracking-tighter mb-10 leading-tight">Visi & <span class="text-orange-500">Misi.</span></h2>
+            <div class="glass p-8 lg:p-12 rounded-[2.5rem] lg:rounded-[4rem] text-base lg:text-xl leading-relaxed text-slate-600 dark:text-slate-400 text-left">
+                <p class="mb-4 lg:mb-6 italic font-bold text-slate-900 dark:text-slate-100 underline decoration-orange-500">Visi:</p>
+                <p class="mb-6 lg:mb-8 text-sm lg:text-lg">Menjadi pengembang solusi digital yang inovatif dan berkontribusi aktif dalam kemajuan teknologi di lingkungan Universitas Tangerang Raya.</p>
+                <p class="mb-4 lg:mb-6 italic font-bold text-slate-900 dark:text-slate-100 underline decoration-blue-500">Misi:</p>
+                <ul class="list-disc pl-6 space-y-4 text-sm lg:text-lg">
                     <li>Mengembangkan aplikasi web modern yang fungsional dan user-friendly.</li>
                     <li>Aktif dalam kegiatan HIMATIF untuk memperkuat ekosistem belajar.</li>
                     <li>Terus mempelajari teknologi terbaru seperti AI dan Analisis Data.</li>
@@ -169,10 +186,9 @@
         </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="page hidden py-24 container mx-auto px-6">
-        <div class="max-w-3xl mx-auto glass p-12 rounded-[3.5rem] shadow-2xl">
-            <h2 class="text-4xl font-black italic mb-8">Get In Touch.</h2>
+        <div class="max-w-3xl mx-auto glass p-8 lg:p-12 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-2xl">
+            <h2 class="text-3xl lg:text-4xl font-black italic mb-8">Get In Touch.</h2>
             <div class="space-y-6">
                 <input type="text" placeholder="Name" class="w-full bg-slate-900/10 dark:bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-500 text-inherit">
                 <textarea rows="4" placeholder="Your Message" class="w-full bg-slate-900/10 dark:bg-white/5 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-500 text-inherit"></textarea>
@@ -181,45 +197,41 @@
         </div>
     </section>
 
-    <!-- INTERACTIVE (GAME & QUIZ) -->
-    <section id="interactive" class="page hidden py-24 container mx-auto px-6">
+    <section id="interactive" class="page hidden py-12 lg:py-24 container mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-10">
-            <!-- Mini Game Section -->
-            <div class="glass p-10 rounded-[3.5rem] shadow-2xl text-center">
-                <h3 class="text-3xl font-black italic mb-6">Mini <span class="text-blue-500">Games</span></h3>
-                <p class="text-xs font-bold uppercase tracking-widest mb-4 opacity-60">Catch the Orange Square!</p>
+            <div class="glass p-8 lg:p-10 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-2xl text-center">
+                <h3 class="text-2xl lg:text-3xl font-black italic mb-6">Mini <span class="text-blue-500">Games</span></h3>
+                <p class="text-[10px] font-bold uppercase tracking-widest mb-4 opacity-60">Catch the Orange Square!</p>
                 <canvas id="game-canvas" width="300" height="300" class="mx-auto shadow-2xl mb-6"></canvas>
                 <p class="font-black text-2xl">Score: <span id="game-score">0</span></p>
                 <button onclick="startGame()" class="mt-4 px-8 py-3 bg-blue-500 text-white rounded-xl font-bold uppercase text-xs tracking-widest">Restart Game</button>
             </div>
 
-            <!-- Quiz Section -->
-            <div class="glass p-10 rounded-[3.5rem] shadow-2xl">
-                <h3 class="text-3xl font-black italic mb-6">PPKN <span class="text-orange-500">Quiz</span></h3>
+            <div class="glass p-8 lg:p-10 rounded-[2.5rem] lg:rounded-[3.5rem] shadow-2xl">
+                <h3 class="text-2xl lg:text-3xl font-black italic mb-6">PPKN <span class="text-orange-500">Quiz</span></h3>
                 <div id="quiz-container">
                     <div id="question-box" class="mb-8">
-                        <p id="quiz-question" class="text-lg font-bold mb-4 italic">Tekan tombol di bawah untuk mulai kuis!</p>
+                        <p id="quiz-question" class="text-base lg:text-lg font-bold mb-4 italic">Tekan tombol di bawah untuk mulai kuis!</p>
                         <div id="quiz-options" class="grid gap-3"></div>
                     </div>
                     <div class="flex justify-between items-center border-t border-white/10 pt-6">
-                        <p class="font-bold">Skor: <span id="quiz-score">0</span></p>
-                        <button id="quiz-btn" onclick="startQuiz()" class="px-8 py-3 bg-orange-500 text-white rounded-xl font-bold uppercase text-xs tracking-widest">Mulai Kuis</button>
+                        <p class="font-bold text-sm lg:text-base">Skor: <span id="quiz-score">0</span></p>
+                        <button id="quiz-btn" onclick="startQuiz()" class="px-6 lg:px-8 py-3 bg-orange-500 text-white rounded-xl font-bold uppercase text-[10px] tracking-widest">Mulai Kuis</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- MODAL OVERLAY -->
     <div id="modalOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-[100] hidden items-center justify-center p-6" onclick="closeModal()">
-        <div class="glass max-w-2xl w-full p-10 rounded-[3rem] relative shadow-2xl" onclick="event.stopPropagation()">
+        <div class="glass max-w-2xl w-full p-8 lg:p-10 rounded-[2.5rem] lg:rounded-[3rem] relative shadow-2xl" onclick="event.stopPropagation()">
             <button onclick="closeModal()" class="absolute top-6 right-8 text-2xl font-bold">×</button>
             <div id="modalBody"></div>
         </div>
     </div>
 
     <footer class="py-20 text-center opacity-40">
-        <p class="text-[10px] font-black uppercase tracking-[0.5em]">&copy; 2026 Bastian | UNTARA TEKNOLOGI INFORMASI</p>
+        <p class="text-[8px] lg:text-[10px] font-black uppercase tracking-[0.3em] lg:tracking-[0.5em] px-4">&copy; 2026 Bastian | UNTARA TEKNOLOGI INFORMASI</p>
     </footer>
 </div>
 
@@ -227,7 +239,21 @@
 <script>
     AOS.init({ duration: 1000, once: true });
 
-    // Fungsi Ganti Foto Profil Baru
+    // Navbar Toggle Logic
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+        if (menu.classList.contains('menu-closed')) {
+            menu.classList.remove('menu-closed');
+            menu.classList.add('menu-open');
+            icon.innerText = '✕';
+        } else {
+            menu.classList.remove('menu-open');
+            menu.classList.add('menu-closed');
+            icon.innerText = '☰';
+        }
+    }
+
     function previewImage(event) {
         const reader = new FileReader();
         reader.onload = function() {
@@ -245,10 +271,10 @@
     function openModal(id) {
         const data = projectDetails[id];
         document.getElementById('modalBody').innerHTML = `
-            <span class="text-orange-500 font-black text-xs uppercase tracking-widest mb-4 block">Project Detail</span>
-            <h2 class="text-4xl font-black italic mb-6">${data.title}</h2>
-            <p class="text-slate-500 dark:text-slate-400 text-lg italic mb-6">"${data.desc}"</p>
-            <p class="text-xs font-bold uppercase tracking-widest opacity-60">Tech Stack: ${data.tech}</p>
+            <span class="text-orange-500 font-black text-[10px] uppercase tracking-widest mb-4 block">Project Detail</span>
+            <h2 class="text-2xl lg:text-4xl font-black italic mb-6">${data.title}</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-base lg:text-lg italic mb-6">"${data.desc}"</p>
+            <p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Tech Stack: ${data.tech}</p>
         `;
         document.getElementById('modalOverlay').classList.add('modal-active');
     }
@@ -277,7 +303,6 @@
 
     function toggleDarkMode() { document.documentElement.classList.toggle('dark'); }
 
-    // --- GAME LOGIC ---
     let canvas = document.getElementById('game-canvas');
     let ctx = canvas.getContext('2d');
     let score = 0;
@@ -305,11 +330,13 @@
 
     canvas.addEventListener('mousedown', function(e) {
         let rect = canvas.getBoundingClientRect();
-        let mouseX = e.clientX - rect.left;
-        let mouseY = e.clientY - rect.top;
+        let scaleX = canvas.width / rect.width;
+        let scaleY = canvas.height / rect.height;
+        let mouseX = (e.clientX - rect.left) * scaleX;
+        let mouseY = (e.clientY - rect.top) * scaleY;
 
         if (mouseX > target.x && mouseX < target.x + target.size &&
-            mouseY > target.y && mouseY < target.y + target.top) {
+            mouseY > target.y && mouseY < target.y + target.size) {
             score++;
             document.getElementById('game-score').innerText = score;
             spawnTarget();
@@ -317,7 +344,6 @@
         }
     });
 
-    // --- QUIZ LOGIC ---
     const ppknQuestions = [
         { q: "Apa lambang sila ke-3 Pancasila?", a: ["Pohon Beringin", "Rantai", "Bintang", "Kepala Banteng"], c: 0 },
         { q: "Siapa ketua BPUPKI?", a: ["Ir. Soekarno", "Dr. Radjiman Wedyodiningrat", "Moh. Hatta", "Mr. Muh Yamin"], c: 1 },
@@ -355,7 +381,7 @@
         document.getElementById('quiz-question').innerText = `${currentQ + 1}. ${qData.q}`;
         let optionsHtml = '';
         qData.a.forEach((opt, index) => {
-            optionsHtml += `<button onclick="checkAnswer(${index})" class="text-left p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-orange-500/20 transition-all text-sm font-bold italic">${opt}</button>`;
+            optionsHtml += `<button onclick="checkAnswer(${index})" class="text-left p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-orange-500/20 transition-all text-[12px] font-bold italic">${opt}</button>`;
         });
         document.getElementById('quiz-options').innerHTML = optionsHtml;
     }
@@ -371,3 +397,5 @@
 </script>
 </body>
 </html>
+
+```
